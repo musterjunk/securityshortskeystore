@@ -21,6 +21,7 @@ public class KeyStoreManager {
 	public void createKeyStoreWithAESKey(String alias, String keyStoreFileName, String password) 
 			throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
 		
+		System.out.println("keystoreFileName");
 		File file = new File(keyStoreFileName);
 		if (!file.exists()) {
 			SecretKey sk = AESKeys.getNewAESKey();

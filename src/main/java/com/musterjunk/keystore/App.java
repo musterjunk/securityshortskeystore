@@ -20,7 +20,7 @@ public class App
     	
         KeyStoreManager ksm = new KeyStoreManager();
         try {
-			ksm.createKeyStoreWithAESKey("secretAES", System.getProperty("user.dir") + "/testData", password);
+			ksm.createKeyStoreWithAESKey("secretAES", System.getProperty("user.home") + "/testData/keystore.jks", password);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
