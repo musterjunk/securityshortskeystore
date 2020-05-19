@@ -1,6 +1,7 @@
 package com.musterjunk.keystore;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -21,12 +22,20 @@ public class KeyStoreManager {
 	public void createKeyStoreWithAESKey(String alias, String keyStoreFileName, String password) 
 			throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
 		
-		System.out.println("keystoreFileName");
+		KeyStore ks = KeyStore.getInstance("PKCS12");
 		File file = new File(keyStoreFileName);
 		if (!file.exists()) {
-			SecretKey sk = AESKeys.getNewAESKey();
-			KeyStore ks = KeyStore.getInstance("PKCS12"); //"JCEKS" was reported as the only to work
 			ks.load(null, password.toCharArray());
+			FileOutputStream fos = new FileOutputStream(file);
+			ks.store(fos, password.toCharArray());
+		}
+		else {
+			FileInputStream fis = new FileInputStream(file);
+			ks.load(fis, password.toCharArray());
+		}
+		
+		if (!ks.containsAlias(alias)) {
+			SecretKey sk = AESKeys.getNewAESKey();
 			ks.setEntry(alias, new KeyStore.SecretKeyEntry(sk), new KeyStore.PasswordProtection(password.toCharArray()));
 			FileOutputStream fos = new FileOutputStream(file);
 			ks.store(fos, password.toCharArray());

@@ -14,8 +14,9 @@ public class App
     public static void main( String[] args )
     {
     	String password = "AReallyLongPassword";
-    	if(args.length > 1) {
-    		password = args[1];
+    	if(args.length > 0) {
+    		password = args[0];
+    		System.out.println("Using '" + password + "' as password.");
     	}
     	
         KeyStoreManager ksm = new KeyStoreManager();
