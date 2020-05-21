@@ -1,4 +1,4 @@
-package com.musterjunk.keystore;
+package com.musterjunk.keys;
 
 
 import static org.junit.Assert.assertTrue;
@@ -13,18 +13,10 @@ import org.junit.Test;
 import com.musterjunk.keys.AESKeys;
 
 /**
- * Unit test for simple App.
+ * Unit test for AESKeys class.
  */
 public class AESKeysTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
     
     @Test
     public void verifyAESKey() {
@@ -38,4 +30,5 @@ public class AESKeysTest
 			e.printStackTrace();
 		}
     }
+    
 }
