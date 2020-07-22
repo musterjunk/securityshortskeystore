@@ -13,13 +13,17 @@ public class App
 {
     public static void main( String[] args )
     {
-    	String password = "AReallyLongPassword";
+    	String password = "somelongpassword";
     	if(args.length > 0) {
     		password = args[0];
     		System.out.println("Using '" + password + "' as password.");
     	}
     	
-        KeyStoreManager ksm = new KeyStoreManager();
+        KeyStoreManager ksm = new KeyStoreManager.Builder()
+        		.withStoreFileName(System.getProperty("user.home") + "/testData/keystore.jks")
+        		.withPassword(password)
+        		.build();
+        
         try {
 			ksm.createKeyStoreWithAESKey("secretAES", System.getProperty("user.home") + "/testData/keystore.jks", password);
 		} catch (NoSuchAlgorithmException e) {
