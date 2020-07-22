@@ -28,6 +28,7 @@ public class KeyStoreManager {
 			ks.load(null, password.toCharArray());
 			FileOutputStream fos = new FileOutputStream(file);
 			ks.store(fos, password.toCharArray());
+			fos.close();
 		}
 		else {
 			FileInputStream fis = new FileInputStream(file);
@@ -39,6 +40,7 @@ public class KeyStoreManager {
 			ks.setEntry(alias, new KeyStore.SecretKeyEntry(sk), new KeyStore.PasswordProtection(password.toCharArray()));
 			FileOutputStream fos = new FileOutputStream(file);
 			ks.store(fos, password.toCharArray());
+			fos.close();
 		}
 		
 	}
