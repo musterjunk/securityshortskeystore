@@ -21,6 +21,7 @@ public class KeyStoreManager {
 	private String password;
 	private String storeFileName;
 	private KeyStore store;
+	private String type;
 
 	private KeyStoreManager(){
 		
@@ -29,6 +30,7 @@ public class KeyStoreManager {
 	public static class Builder {
 		private String password;
 		private String storeFileName;
+		private String type;
 
 		public Builder() {
 			
@@ -44,17 +46,23 @@ public class KeyStoreManager {
 			return this;
 		}
 		
+		public Builder withType(String type) {
+			this.type = type;
+			return this;
+		}
+		
 		public KeyStoreManager build() {
 			KeyStoreManager manager = new KeyStoreManager();
 			manager.password = this.password;
 			manager.storeFileName = this.storeFileName;
+			manager.type = this.type;
 			return manager;
 		}
 	}
 	
 	public KeyStore getKeyStore() 
 			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-		KeyStore ks = KeyStore.getInstance("PKCS12");
+		KeyStore ks = KeyStore.getInstance(this.type);
 		File file = new File(this.storeFileName);
 		if (!file.exists()) {
 			ks.load(null, this.password.toCharArray());
@@ -70,16 +78,16 @@ public class KeyStoreManager {
 		return ks;
 	}
 	
-	public SecretKey getAESKey(String alias) 
+	public SecretKey getAESKey(String alias, String password) 
 			throws KeyStoreException, NoSuchAlgorithmException, FileNotFoundException, 
 			CertificateException, UnrecoverableEntryException, IOException, 
 			KeyAliasNotFoundException {
 		
-		return this.getAESKey(alias, false);
+		return this.getAESKey(alias, password, false);
 		
 	}
 	
-	public SecretKey getAESKey(String alias, boolean createNewKey) 
+	public SecretKey getAESKey(String alias, String password, boolean createNewKey) 
 			throws KeyStoreException, NoSuchAlgorithmException, FileNotFoundException, 
 				CertificateException, IOException, KeyAliasNotFoundException, 
 				UnrecoverableEntryException {
@@ -114,7 +122,7 @@ public class KeyStoreManager {
 	public void createKeyStoreWithAESKey(String alias, String keyStoreFileName, String password) 
 			throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
 		
-		KeyStore ks = KeyStore.getInstance("PKCS12");
+		KeyStore ks = KeyStore.getInstance(this.type);
 		File file = new File(keyStoreFileName);
 		if (!file.exists()) {
 			ks.load(null, password.toCharArray());
@@ -125,6 +133,7 @@ public class KeyStoreManager {
 		else {
 			FileInputStream fis = new FileInputStream(file);
 			ks.load(fis, password.toCharArray());
+			fis.close();
 		}
 		
 		if (!ks.containsAlias(alias)) {

@@ -3,7 +3,12 @@ package com.musterjunk.keystore;
 import java.io.IOException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+
+import javax.crypto.SecretKey;
+
+import com.musterjunk.keystore.exception.KeyAliasNotFoundException;
 
 /**
  * Hello world!
