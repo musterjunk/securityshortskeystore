@@ -18,7 +18,7 @@ import com.musterjunk.keystore.exception.KeyAliasNotFoundException;
 import java.security.KeyStore.SecretKeyEntry;
 
 public class KeyStoreManager {
-	private String password;
+	private String storePassword;
 	private String storeFileName;
 	private KeyStore store;
 	private String type;
@@ -28,7 +28,7 @@ public class KeyStoreManager {
 	}
 	
 	public static class Builder {
-		private String password;
+		private String storePassword;
 		private String storeFileName;
 		private String type;
 
@@ -37,7 +37,7 @@ public class KeyStoreManager {
 		}
 		
 		public Builder withPassword(String password) {
-			this.password = password;
+			this.storePassword = password;
 			return this;
 		}
 		
@@ -53,7 +53,7 @@ public class KeyStoreManager {
 		
 		public KeyStoreManager build() {
 			KeyStoreManager manager = new KeyStoreManager();
-			manager.password = this.password;
+			manager.storePassword = this.storePassword;
 			manager.storeFileName = this.storeFileName;
 			manager.type = this.type;
 			return manager;
@@ -65,14 +65,14 @@ public class KeyStoreManager {
 		KeyStore ks = KeyStore.getInstance(this.type);
 		File file = new File(this.storeFileName);
 		if (!file.exists()) {
-			ks.load(null, this.password.toCharArray());
+			ks.load(null, this.storePassword.toCharArray());
 			FileOutputStream fos = new FileOutputStream(file);
-			ks.store(fos, this.password.toCharArray());
+			ks.store(fos, this.storePassword.toCharArray());
 			fos.close();
 		}
 		else {
 			FileInputStream fis = new FileInputStream(file);
-			ks.load(fis, password.toCharArray());
+			ks.load(fis, storePassword.toCharArray());
 		}
 		this.store = ks;
 		return ks;
@@ -103,7 +103,7 @@ public class KeyStoreManager {
 				File file = new File(this.storeFileName);
 				this.store.setEntry(alias, new KeyStore.SecretKeyEntry(sk), new KeyStore.PasswordProtection(password.toCharArray()));
 				FileOutputStream fos = new FileOutputStream(file);
-				this.store.store(fos, password.toCharArray());
+				this.store.store(fos, this.storePassword.toCharArray());
 				fos.close();
 			} else {
 				throw new KeyAliasNotFoundException(alias);
