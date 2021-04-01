@@ -119,30 +119,4 @@ public class KeyStoreManager {
 		return sk;
 	}
 	
-	public void createKeyStoreWithAESKey(String alias, String keyStoreFileName, String password) 
-			throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
-		
-		KeyStore ks = KeyStore.getInstance(this.type);
-		File file = new File(keyStoreFileName);
-		if (!file.exists()) {
-			ks.load(null, password.toCharArray());
-			FileOutputStream fos = new FileOutputStream(file);
-			ks.store(fos, password.toCharArray());
-			fos.close();
-		}
-		else {
-			FileInputStream fis = new FileInputStream(file);
-			ks.load(fis, password.toCharArray());
-			fis.close();
-		}
-		
-		if (!ks.containsAlias(alias)) {
-			SecretKey sk = AESKeys.getNewAESKey();
-			ks.setEntry(alias, new KeyStore.SecretKeyEntry(sk), new KeyStore.PasswordProtection(password.toCharArray()));
-			FileOutputStream fos = new FileOutputStream(file);
-			ks.store(fos, password.toCharArray());
-			fos.close();
-		}
-		
-	}
 }

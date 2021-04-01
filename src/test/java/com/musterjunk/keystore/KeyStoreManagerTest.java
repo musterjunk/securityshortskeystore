@@ -17,6 +17,7 @@ import java.security.KeyStore.*;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 import javax.net.ssl.KeyManagerFactory;
@@ -67,12 +68,16 @@ public class KeyStoreManagerTest
     			fail();
     		}
     		
+    		System.out.println("Default type is: " + KeyStore.getDefaultType());
     		String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
 			System.out.println("Base64 encoded key is: " + encodedKey);
 			encodedKey = Base64.getEncoder().encodeToString(key2.getEncoded());
 			System.out.println("Base64 encoded key is: " + encodedKey);
-
-			//ksm.createKeyStoreWithAESKey("ASEKey", ksName, "somelongpassword");
+			Set<KeyStore.Entry.Attribute> algo = ksm.getKeyStore().getEntry("aeskey", new KeyStore.PasswordProtection("somelongpassword2".toCharArray())).getAttributes();
+			System.out.println(algo);
+			SecretKeyEntry entry = (SecretKeyEntry) ksm.getKeyStore().getEntry("aeskey", new KeyStore.PasswordProtection("somelongpassword2".toCharArray()));
+			KeyStore keystore = ksm.getKeyStore();
+			
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
